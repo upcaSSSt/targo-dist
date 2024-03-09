@@ -2,16 +2,12 @@ const { readFileSync, writeFileSync, unlinkSync } = require('node:fs');
 const { join } = require('node:path');
 const express = require('express');
 const multer = require('multer');
-const cors = require('cors');
 
-const HOST = 'http://localhost';
-const PORT = 3000;
+const PORT = 10000;
 
 const app = express();
 
 const products = JSON.parse(readFileSync('db.json'));
-
-app.use(cors());
 
 app.use(express.static(__dirname));
 app.use(express.json());
@@ -27,14 +23,7 @@ const upload = multer({ storage: multer.diskStorage({
   })
 });
 
-app.use(function (req, res, next) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-  res.setHeader('Content-Type', 'application/json');
-  next();
-});
-app.listen(PORT, () => console.log(`App is listening on ${HOST}:${PORT}`));
+app.listen(PORT, () => console.log(`App is listening on ${PORT}`));
 
 app.get('/products', (req, res) => {
   res.json(products);
