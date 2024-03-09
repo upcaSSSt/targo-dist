@@ -16,16 +16,16 @@ app.use(cors());
 app.use(express.static(__dirname));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-//app.use();
 
 const upload = multer({ storage: multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'src/assets/products');
-  },
-  filename: (req, file, cb) => {
-    cb(null, file.originalname);
-  },
-}) });
+    destination: (req, file, cb) => {
+      cb(null, 'img');
+    },
+    filename: (req, file, cb) => {
+      cb(null, file.originalname);
+    },
+  })
+});
 
 app.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -57,8 +57,9 @@ app.post(`/order`, (req, res) => {
 });
 
 app.post(`/del`, (req, res) => {
-  unlinkSync(join('src', 'assets', 'products', products[req.body.index].imgName));
+  unlinkSync(join('img', products[req.body.index].imgName));
   products.splice(req.body.index, 1);
   writeFileSync('db.json', JSON.stringify(products));
   res.send('Удалил');
 });
+
